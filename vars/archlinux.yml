@@ -1,0 +1,8 @@
+---
+prometheus_selinux_packages:
+  - python-selinux
+prometheus_distribution_packages:
+  - prometheus
+  - alertmanager
+prometheus_home_dir: /
+_prometheus_binary_install_dir: '/usr/bin'

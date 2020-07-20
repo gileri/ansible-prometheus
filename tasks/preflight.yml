@@ -92,6 +92,7 @@
       set_fact:
         prometheus_version: "{{ _latest_release.json.tag_name[1:] }}"
   when:
+    - not prometheus_distribution_packages is defined
     - prometheus_version == "latest"
     - prometheus_binary_local_dir | length == 0
     - not prometheus_skip_install
@@ -110,5 +111,6 @@
         - "('linux-' + go_arch + '.tar.gz') in item"
   delegate_to: localhost
   when:
+    - not prometheus_distribution_packages is defined
     - prometheus_binary_local_dir | length == 0
     - not prometheus_skip_install

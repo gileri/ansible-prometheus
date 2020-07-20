@@ -12,7 +12,7 @@
     shell: "/usr/sbin/nologin"
     group: prometheus
     createhome: false
-    home: "{{ prometheus_db_dir }}"
+    home: "{{ prometheus_home_dir }}"
 
 - name: create prometheus data directory
   file:
@@ -86,6 +86,7 @@
   when:
     - prometheus_binary_local_dir | length == 0
     - not prometheus_skip_install
+    - prometheus_distribution_packages is not defined
 
 - name: propagate locally distributed prometheus and promtool binaries
   copy:
@@ -103,7 +104,12 @@
   notify:
     - restart prometheus
 
-- name: create systemd service unit
+- name: install prometheus distribution packages
+  package:
+    name: "{{ prometheus_distribution_packages }}"
+  when: prometheus_distribution_packages is defined
+
+- name: create/overwrite systemd service unit
   template:
     src: prometheus.service.j2
     dest: /etc/systemd/system/prometheus.service
